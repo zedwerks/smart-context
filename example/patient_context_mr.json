@@ -1,0 +1,15 @@
+{
+    "resourceType" : "Parameters",
+    "parameter": [
+        {
+            "name": "patient",
+            "resource": {
+                "resourceType": "Patient",
+                "use": "usual",
+                "system": "http://viha.bc.ca/mrns",
+                "type": "MR",
+                "value": "88064425"
+            }
+        }
+    ]
+}

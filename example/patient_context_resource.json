@@ -1,0 +1,11 @@
+{
+    "resourceType" : "Parameters",
+    "parameter": [
+        {
+            "name": "patient",
+            "valueReference": {
+                "reference": "Patient/12345"
+            }
+        }
+    ]
+}

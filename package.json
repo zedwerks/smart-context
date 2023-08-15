@@ -1,6 +1,8 @@
 {
   "name": "smart-context",
   "version": "1.0.0",
+  "author": "",
+  "license": "ISC",
   "description": "An example implementation of a SMART on FHIR Context API for use by clients and the authorization service to resolve launch context.",
   "main": "index.js",
   "scripts": {
@@ -11,8 +13,6 @@
     "url": "git+https://github.com/zedwerks/smart-context.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/zedwerks/smart-context/issues"
   },
@@ -20,6 +20,8 @@
   "dependencies": {
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
-    "mongoose": "^7.4.2"
+    "mongoose": "^7.4.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
   }
 }

@@ -10,7 +10,7 @@ exports.createContext = asyncHandler(async (req, res, next) => {
     var contextRequestJson = JSON.stringify(req.body);
     var contextId = randomUUID();
     console.log(contextRequestJson);
-    console.log("contextId = " + contextId);
+    console.log("POST contextId = " + contextId);
 
     ContextModel.newContext(contextRequestJson, contextId)
 
@@ -24,10 +24,9 @@ exports.createContext = asyncHandler(async (req, res, next) => {
 
 exports.getContext = asyncHandler(async (req, res, next) => {
     var contextId = req.params.id;
-    console.log("contextId = " + contextId);
+    console.log("GET contextId = " + contextId);
 
     var data = ContextModel.getContext(contextId);
-    console.log(data);
     res.contentType("application/json");
     if (data == null) {
         res.status(404).send();
@@ -38,6 +37,6 @@ exports.getContext = asyncHandler(async (req, res, next) => {
 
 exports.deleteContext = asyncHandler(async (req, res, next) => {
     var contextId = req.params.id;
-    console.log("contextId = " + contextId);
+    console.log("DELETE contextId = " + contextId);
     ContextModel.deleteContext(contextId);
 });

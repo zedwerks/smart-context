@@ -12,5 +12,5 @@ services:
     environment:
     - ISSUER_URI=http://localhost:8080/auth/realms/smart-context
     - JWKS_URI=http://localhost:8080/auth/realms/smart-context/protocol/openid-connect/certs
-    - SCOPES=openid smart-context
+    - SCOPES=launchcontext
     - AUDIENCE=smart-context

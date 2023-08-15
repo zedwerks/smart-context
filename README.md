@@ -57,7 +57,23 @@ At this time the ```POST``` request only requires knowledge of a single API Key 
 ### POST to set context
 
 ```shell
-curl -H
+curl --location 'http://localhost:8088/api/context' \
+--header 'Content-Type: application/json' \
+--data '{
+    "resourceType" : "Parameters",
+    "parameter": [
+        {
+            "name": "patient",
+            "resource": {
+                "resourceType": "Patient",
+                "use": "usual",
+                "system":"urn:oid:2.16.840.1.113883.4.50",
+                "type": "JHN",
+                "value": "9094626885"
+            }
+        }
+    ]
+}'
 ```
 
 ### GET Request to resolve context payload
@@ -66,5 +82,5 @@ This is called by the Authorization server, by taking the ```launch``` parameter
 using it in the GET request.
 
 ```shell
-curl -H
+curl --location 'http://localhost:8088/api/context/3335a882-bf12-48bb-ad78-212a46ae9297'
 ```

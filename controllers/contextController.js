@@ -38,5 +38,15 @@ exports.getContext = asyncHandler(async (req, res, next) => {
 exports.deleteContext = asyncHandler(async (req, res, next) => {
     var contextId = req.params.id;
     console.log("DELETE contextId = " + contextId);
-    ContextModel.deleteContext(contextId);
+    try {
+        ContextModel.deleteContext(contextId);
+    } catch (err) {
+        if (err.code == 'ENOENT') {
+            res.status(404).send();
+            console.log(err);
+        } else {
+            res.status(500).send();
+        }
+    }
+    res.status(200).send();
 });

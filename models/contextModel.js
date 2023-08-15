@@ -11,7 +11,10 @@ const newContext = (contextJson, id) => {
 }
 
 const deleteContext = (id) => {
-    fs.unlinkSync(path.join(context_dir + "/" + id + "_context.json"));
+    fs.unlinkSync(path.join(context_dir + "/" + id + "_context.json"), function (err) { 
+        if (err) throw err;
+        console.log('File deleted!');
+    });
 }
 
 const readContext = (id) => {
@@ -25,10 +28,10 @@ const readContext = (id) => {
         return null;
     }
 }
-  
+
 class ContextModel {
     constructor() {
-        fs.mkdir( context_dir, function (err) {});
+        fs.mkdir(context_dir, function (err) { });
     }
     getContext(id) {
         return readContext(id);

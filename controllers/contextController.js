@@ -43,3 +43,17 @@ exports.getContext = asyncHandler(async (req, res, next) => {
         res.end(data);
     });
 });
+
+exports.deleteContext = asyncHandler(async (req, res, next) => {
+    var path = __dirname  + context_dir + "/" + req.params.id + "_context.json";
+    console.log("path = " + path);
+    fs.unlink( path, function (err) {
+        console.log("In deleteContext");
+
+        if (err) {
+            console.log("Error deleting file: " + err);
+        }
+        res.contentType("application/json");
+        res.end();
+    });
+});

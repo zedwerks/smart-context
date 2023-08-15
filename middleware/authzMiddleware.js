@@ -17,7 +17,7 @@ function getKey(header, callback) {
     });
 }
 
-const verifyToken = (req, res, next) => {
+const auth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (authHeader) {
         const token = authHeader.split(' ')[1];
@@ -33,4 +33,5 @@ const verifyToken = (req, res, next) => {
     }
 }
 
-module.exports = verifyToken;
+
+module.exports = auth;

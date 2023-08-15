@@ -6,6 +6,8 @@
   "description": "An example implementation of a SMART on FHIR Context API for use by clients and the authorization service to resolve launch context.",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
+    "swagger-autogen": "node swagger.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,8 +21,10 @@
   "homepage": "https://github.com/zedwerks/smart-context#readme",
   "dependencies": {
     "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.2",
+    "swagger-autogen": "^2.23.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   }

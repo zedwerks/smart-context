@@ -2,11 +2,24 @@
 
 An example implementation of a SMART on FHIR Context API for use by clients and the authorization service to resolve launch context.
 
+## Generating Swagger Docs
+
+```shell
+npm run swagger-autogen
+```
+
 ## Running
 
 ```shell
 node server.js
 ```
+
+or
+
+```shell
+npm start
+```
+
 
 ## Dockerfile
 

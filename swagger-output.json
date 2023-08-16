@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "title": "SMART Context REST API",
+    "description": "This is a REST API for the SMART Context service. It is used by client applications to set the patient context ahead of calling the smart app, In turn, the FHIR Server's authorization server uses this to get the patient context based on the launch context."
   },
   "host": "localhost:3000",
   "basePath": "/",
@@ -11,7 +11,7 @@
     "http"
   ],
   "paths": {
-    "/{id}": {
+    "/api/context/{id}": {
       "get": {
         "description": "",
         "parameters": [
@@ -42,13 +42,19 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/": {
+    "/api/context/": {
       "post": {
         "description": "",
         "responses": {

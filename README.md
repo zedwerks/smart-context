@@ -31,7 +31,7 @@ docker run -p 8088:8088 smart-context
 
 ## Docker Compose
 
-This is the simplest way to get going. 
+This is the simplest way to get going. Edit the docker-compose.yml file have the environment variables set, then run:
 
 ```shell
 docker compose up -d
@@ -39,13 +39,23 @@ docker compose up -d
 
 ### Environment Variables
 
-```ISSUER_URI```
+```ISSUER```
 is the url of the Oauth 2.0 token issuer. The GET method is protected by this token.
 The issuer's well-known endpoint is used to find the jwks.json endpoint for token validation.
 
-```SCOPES``` is the list of scopes needed by the authenticated system. If absent, a 403 will be returned by the GET request.
+This issuer must be found as the ```iss``` value in the token, or 401 is returned.
 
-```API_KEY``` is the single (for now) API key needed by EMR/EHR clients to be able to POST a context. We can't/don't want to require user authN since the user has not completed authentication to the SMART authorization server until the launch flow completes.  
+```SCOPES``` is the list of scopes needed by the authenticated system. If absent, a 401 will be returned by the GET request.
+
+```AUDIENCE``` is the OAuth 2.0 audience that must be found in the JWT. Otherwise, a 401 is returned.
+
+```API_KEY``` is the single (for now) API key needed by EMR/EHR clients to be able to POST a context. We can't/don't want to require user authN since the user has not completed authentication to the SMART authorization server until the launch flow completes.
+
+For now this concept only supports a single API key. You can generate something reasonable like so:
+
+```shell
+openssl rand -hex 32
+```
 
 
 ### Notes

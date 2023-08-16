@@ -14,8 +14,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 
 app.use('/', indexRouter);
-app.use("/api/context", contextRouter);
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use("/", contextRouter);
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 var server = app.listen(port, function () {
     var p = server.address().port;

@@ -11,5 +11,6 @@ services:
       - .:/app
     environment:
     - ISSUER=http://localhost:9200/smartauth
-    - SCOPES=smart-context
+    - SCOPES="launch context"
     - AUDIENCE=authserver
+    - API_KEY=e7ce47e88053fa31998de414423e82c47fd479688be5ad8dd9ecc0ac61108a8b

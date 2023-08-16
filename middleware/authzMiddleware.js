@@ -1,9 +1,22 @@
+const { get } = require('express/lib/response');
 const jwt = require('jsonwebtoken');
+const http = require('http');
+
 var jwksClient = require('jwks-rsa');
 
 function getJwksUri() {
-    // to be replaced with a call to the issuer's well-known endpoint
-    return process.env.JWKS_URI;
+    var wkeUri = process.env.ISSUER + '/.well-known/openid-configuration';
+
+    http.get(wkeUri, (response) => {
+        if (err) {
+            console.log(err);
+        } else {
+            var result = JSON.parse(response.body);
+            console.log('WKE data: ' + result);
+            return result.jwks_uri;
+        }
+    });
+    return null;
 }
 
 function getKey(header, callback) {

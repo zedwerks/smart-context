@@ -10,7 +10,6 @@ services:
     volumes:
       - .:/app
     environment:
-    - ISSUER_URI=http://localhost:8080/auth/realms/smart-context
-    - JWKS_URI=http://localhost:8080/auth/realms/smart-context/protocol/openid-connect/certs
-    - SCOPES=launchcontext
-    - AUDIENCE=smart-context
+    - ISSUER=http://localhost:9200/smartauth
+    - SCOPES=smart-context
+    - AUDIENCE=authserver

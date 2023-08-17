@@ -35,10 +35,9 @@ exports.tokenAuth = async (req, res, next) => {
 
     if (issuer === "" || issuer === undefined || issuer === null) {
         console.warn('ISSUER is not set in env');
-        res.sendStatus(401);
+        return res.sendStatus(401);
     }
-
-    if (authHeader) {
+    else if (authHeader) {
         const token = authHeader.split(' ')[1];
         const decodedToken = jwt.verify(token, getKey, (err, user) => {
             if (err) {
@@ -58,13 +57,11 @@ exports.tokenAuth = async (req, res, next) => {
                 if (!neededScopes.split(' ').some(scope => scopes.includes(scope))) {
                     return res.sendStatus(401);
                 }
-                return res.sendStatus(401);
             }
-            req.user = user;
             next();
         });
     } else {
-        res.sendStatus(401);
+        return res.sendStatus(401);
     }
 }
 

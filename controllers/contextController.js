@@ -18,7 +18,7 @@ exports.createContext = asyncHandler(async (req, res, next) => {
     }
 
     res.contentType("application/json");
-    res.status(201).send(JSON.stringify(contextResponse));
+    return res.status(201).send(JSON.stringify(contextResponse));
 });
 
 exports.getContext = asyncHandler(async (req, res, next) => {
@@ -28,9 +28,9 @@ exports.getContext = asyncHandler(async (req, res, next) => {
     var data = ContextModel.getContext(contextId);
     res.contentType("application/json");
     if (data == null) {
-        res.status(404).send();
+        return res.status(404).send();
     } else {
-        res.status(200).send(data);
+        return res.status(200).send(data);
     }
 });
 
@@ -41,11 +41,11 @@ exports.deleteContext = asyncHandler(async (req, res, next) => {
         ContextModel.deleteContext(contextId);
     } catch (err) {
         if (err.code == 'ENOENT') {
-            res.status(404).send();
             console.log(err);
+            return res.status(404).send();
         } else {
-            res.status(500).send();
+            return res.status(500).send();
         }
     }
-    res.status(200).send();
+    return res.status(200).send();
 });

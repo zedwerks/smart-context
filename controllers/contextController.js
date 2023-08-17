@@ -1,4 +1,3 @@
-const express = require('express');
 const { jwt } = require('jsonwebtoken');
 const { json } = require('express/lib/response');
 const { randomUUID } = require('crypto');

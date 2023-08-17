@@ -1,9 +1,5 @@
-const { get } = require('express/lib/response');
 const jwt = require('jsonwebtoken');
 const http = require('http');
-
-var jwksClient = require('jwks-rsa');
-const { verify } = require('crypto');
 
 function getJwksUri() {
     var wkeUri = process.env.ISSUER + '/.well-known/openid-configuration';
@@ -31,8 +27,17 @@ function getKey(header, callback) {
     });
 }
 
-const tokenAuth = async (req, res, next) => {
+exports.tokenAuth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
+    const issuer = process.env.ISSUER;
+    const audience = process.env.AUDIENCE || "smart-authz";
+    const neededScopes = process.env.SCOPES || "context:read";
+
+    if (issuer === "" || issuer === undefined || issuer === null) {
+        console.warn('ISSUER is not set in env');
+        res.sendStatus(401);
+    }
+
     if (authHeader) {
         const token = authHeader.split(' ')[1];
         const decodedToken = jwt.verify(token, getKey, (err, user) => {
@@ -42,20 +47,19 @@ const tokenAuth = async (req, res, next) => {
             if (decodedToken && decodedToken.exp > Date.now() / 1000) {
                 return res.sendStatus(401);
             }
-            if (decodedToken && decodedToken.iss !== process.env.ISSUER) {
+            if (decodedToken && decodedToken.iss !== issuer) {
                 return res.sendStatus(401);
             }
-            if (decodedToken && decodedToken.aud !== process.env.AUDIENCE) {
+            if (decodedToken && decodedToken.aud !== audience) {
                 return res.sendStatus(401);
             }
             if (decodedToken && decodedToken.scopes) {
                 const scopes = decodedToken.scopes.split(' ');
-                if (!process.env.SCOPES.split(' ').some(scope => scopes.includes(scope))) {
+                if (!neededScopes.split(' ').some(scope => scopes.includes(scope))) {
                     return res.sendStatus(401);
                 }
                 return res.sendStatus(401);
             }
-
             req.user = user;
             next();
         });
@@ -64,15 +68,20 @@ const tokenAuth = async (req, res, next) => {
     }
 }
 
-const apiKeyAuth = async (req, res, next) => {
-    const authHeader = req.headers[x-api-key];
-    if (authHeader) {
-        if (authHeader === process.env.API_KEY) {
+exports.apiKeyAuth = async (req, res, next) => {
+    const authHeader = req.headers['x-api-key'];
+    const apiKey = process.env.API_KEY;
+
+    if (apiKey === "" || apiKey === undefined || apiKey === null) {
+        console.warn('API_KEY is not set in env');
+        res.sendStatus(401);
+    }
+    else if (authHeader !== "" || authHeader !== undefined || authHeader !== null) {
+        if (authHeader === apiKey) {
             next();
         } else {
+            console.log('x-api-key is missing or not valid')
             res.sendStatus(401);
         }
     }
 }
-
-module.exports = { tokenAuth, apiKeyAuth };

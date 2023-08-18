@@ -8,18 +8,6 @@ const jwksUri = process.env.JWKS_URI;
 const clientId = process.env.CLIENT_ID || null;
 const neededScopes = process.env.SCOPES || "context:read";
 
-function getJwksUri() {
-    //  this should work, but it returns null when called within getPublicKey()
-    //  So, I'm using a env variable instead
-    const wkeUri = process.env.ISSUER + '/.well-known/openid-configuration';
-
-    axios.get(wkeUri).then(response => {
-        console.debug('jwks_uri: ', response.data.jwks_uri);
-        return response.data.jwks_uri;
-    });
-    return null;
-}
-
 // Function to get the public key
 function getPublicKey(header, callback) {
 

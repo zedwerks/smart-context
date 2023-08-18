@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "SMART Context REST API",
-    "description": "SMART Context REST API for SMART on FHIR where the FHIR server is not related to the launching EMR.",
+    "title": "SMART on FHIR Launch Context REST API",
+    "description": "An API useful for launch context setting and retrieval."
   },
   "host": "localhost:3000",
   "basePath": "/",

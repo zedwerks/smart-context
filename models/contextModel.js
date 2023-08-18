@@ -13,14 +13,14 @@ const newContext = (contextJson, id) => {
 const deleteContext = (id) => {
     fs.unlinkSync(path.join(context_dir + "/" + id + "_context.json"), function (err) { 
         if (err) throw err;
-        console.log('File deleted!');
+        console.debug('File deleted!');
     });
 }
 
 const readContext = (id) => {
     try {
         var filePath = path.join(context_dir + "/" + id + "_context.json");
-        console.log("filePath=  " + filePath);
+        console.debug("filePath=  " + filePath);
         const data = fs.readFileSync(filePath);
         return data;
     }

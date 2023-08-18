@@ -14,7 +14,7 @@ function getJwksUri() {
     const wkeUri = process.env.ISSUER + '/.well-known/openid-configuration';
 
     axios.get(wkeUri).then(response => {
-        console.log('jwks_uri: ', response.data.jwks_uri);
+        console.debug('jwks_uri: ', response.data.jwks_uri);
         return response.data.jwks_uri;
     });
     return null;
@@ -29,7 +29,7 @@ function getPublicKey(header, callback) {
 
     client.getSigningKey(header.kid, (err, key) => {
         if (err) {
-            console.log('Error in getSigningKey:', err);
+            console.warn('Error in getSigningKey:', err);
             callback(err, null);
         }
         const publicKey = key.publicKey || key.rsaPublicKey;
@@ -37,7 +37,7 @@ function getPublicKey(header, callback) {
         if (header.alg && key.alg !== header.alg) {
             callback(new Error('mismatch key algorithm'), null);
         }
-        console.log('publicKey: ', publicKey);
+        console.debug('publicKey: ', publicKey);
         callback(null, publicKey);
     });
 }
@@ -83,7 +83,7 @@ exports.tokenAuth = async (req, res, next) => {
                     return res.sendStatus(401);
                 }
             }
-            console.log('JWT decoded and validated: ', decodedToken);
+            console.debug('JWT decoded and validated: ', decodedToken);
             next();
         });
     } else {
@@ -103,7 +103,7 @@ exports.apiKeyAuth = async (req, res, next) => {
         if (authHeader === apiKey) {
             next();
         } else {
-            console.log('x-api-key is missing or not valid')
+            console.debug('x-api-key is missing or not valid')
             res.sendStatus(401);
         }
     }

@@ -1,5 +1,3 @@
-const { jwt } = require('jsonwebtoken');
-const { json } = require('express/lib/response');
 const { randomUUID } = require('crypto');
 const asyncHandler = require("express-async-handler");
 const ContextModel = require('../models/contextModel');
@@ -8,7 +6,7 @@ exports.createContext = asyncHandler(async (req, res, next) => {
     req.accepts('application/json');
     var contextRequestJson = JSON.stringify(req.body);
     var contextId = randomUUID();
-    console.log(contextRequestJson);
+    console.debug(contextRequestJson);
     console.log("POST contextId = " + contextId);
 
     ContextModel.newContext(contextRequestJson, contextId)
@@ -41,7 +39,7 @@ exports.deleteContext = asyncHandler(async (req, res, next) => {
         ContextModel.deleteContext(contextId);
     } catch (err) {
         if (err.code == 'ENOENT') {
-            console.log(err);
+            console.warn(err);
             return res.status(404).send();
         } else {
             return res.status(500).send();

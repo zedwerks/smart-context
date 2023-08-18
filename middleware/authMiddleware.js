@@ -69,10 +69,6 @@ exports.tokenAuth = async (req, res, next) => {
                 console.log('Error during jwt.verify()', err);
                 return res.sendStatus(401);
             }
-            if (decodedToken && decodedToken.exp < Date.now() / 1000) {
-                console.log('Error: token expired');
-                return res.sendStatus(401);
-            }
             if (decodedToken && decodedToken.iss !== issuer) {
                 console.log('Error: invalid issuer');
                 return res.sendStatus(401);

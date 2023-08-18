@@ -23,7 +23,7 @@ function getJwksUri() {
 // Function to get the public key
 function getPublicKey(header, callback) {
 
-    client = jwksClient({
+    const client = jwksClient({
         jwksUri: jwksUri,
     });
 

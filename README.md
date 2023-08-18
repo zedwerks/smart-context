@@ -47,7 +47,9 @@ This issuer must be found as the ```iss``` value in the token, or 401 is returne
 
 ```SCOPES``` is the list of scopes needed by the authenticated system. If absent, a 401 will be returned by the GET request.
 
-```AUDIENCE``` is the OAuth 2.0 audience that must be found in the JWT. Otherwise, a 401 is returned.
+```CLIENT_ID``` is the OAuth 2.0 clientId that must be found in the JWT. Otherwise, a 401 is returned.
+
+YOu want one client id in your auth server to represent the auth server itself. Strange to say, but the client retrieving context is the authorization server in order to resolve the patient, or encounter, etc, to set permissions and return the SMART bearer token to the calling SMART application.
 
 ```API_KEY``` is the single (for now) API key needed by EMR/EHR clients to be able to POST a context. We can't/don't want to require user authN since the user has not completed authentication to the SMART authorization server until the launch flow completes.
 
@@ -56,7 +58,6 @@ For now this concept only supports a single API key. You can generate something 
 ```shell
 openssl rand -hex 32
 ```
-
 
 ### Notes
 
@@ -69,6 +70,7 @@ At this time the ```POST``` request only requires knowledge of a single API Key 
 ```shell
 curl --location 'http://localhost:8088/api/context' \
 --header 'Content-Type: application/json' \
+--header 'x-api-key: e7ce47e88053fa31998de414423e82c47fd479688be5ad8dd9ecc0ac61108a8b' \
 --data '{
     "resourceType" : "Parameters",
     "parameter": [
@@ -92,5 +94,6 @@ This is called by the Authorization server, by taking the ```launch``` parameter
 using it in the GET request.
 
 ```shell
-curl --location 'http://localhost:8088/api/context/3335a882-bf12-48bb-ad78-212a46ae9297'
+curl --location 'http://localhost:8088/api/context/3335a882-bf12-48bb-ad78-212a46ae9297' \
+--header 'Authorization: Bearer eyJhbGciOiJSUzI1NiIiAiSldUIiwia2lkIiA6ICJLVFwQWRxb19FIn0...
 ```

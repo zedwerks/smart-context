@@ -3,7 +3,7 @@
   "info": {
     "version": "1.0.0",
     "title": "SMART Context REST API",
-    "description": "This is a REST API for the SMART Context service. It is used by client applications to set the patient context ahead of calling the smart app, In turn, the FHIR Server's authorization server uses this to get the patient context based on the launch context."
+    "description": "SMART Context REST API for SMART on FHIR where the FHIR server is not related to the launching EMR.",
   },
   "host": "localhost:3000",
   "basePath": "/",
@@ -20,11 +20,19 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Not Found"
@@ -39,11 +47,19 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Not Found"
@@ -57,9 +73,19 @@
     "/api/context/": {
       "post": {
         "description": "",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }

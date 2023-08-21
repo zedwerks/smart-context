@@ -2,13 +2,20 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "SMART on FHIR Launch Context REST API",
-    "description": "An API useful for launch context setting and retrieval."
+    "title": "SMART on FHIR Context API",
+    "description": "This is a REST API for managing SMART on FHIR Contexts"
   },
   "host": "localhost:3000",
-  "basePath": "/",
+  "basePath": "/api/",
   "schemes": [
-    "http"
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
   ],
   "paths": {
     "/api/context/{id}": {
@@ -86,6 +93,342 @@
           },
           "401": {
             "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ContextId": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "object"
+        },
+        "required": {
+          "type": "array",
+          "example": [
+            "contextId"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "contextId": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "The context id"
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "type": "object",
+          "properties": {
+            "contextId": {
+              "type": "string",
+              "example": "3335a882-bf12-48bb-ad78-212a46ae9297"
+            }
+          }
+        }
+      }
+    },
+    "Context": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "object"
+        },
+        "required": {
+          "type": "array",
+          "example": [
+            "resourceType"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "resourceType": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "example": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "The resource type of the context"
+                },
+                "value": {
+                  "type": "string",
+                  "example": "Parameters"
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "type": "object",
+          "properties": {
+            "resourceType": {
+              "type": "string",
+              "example": "Parameters"
+            },
+            "parameter": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "patient"
+                  },
+                  "resource": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "resourceType": {
+                          "type": "string",
+                          "example": "Patient"
+                        },
+                        "use": {
+                          "type": "string",
+                          "example": "official"
+                        },
+                        "system": {
+                          "type": "string",
+                          "example": "urn:oid:2.16.840.1.113883.4.50"
+                        },
+                        "type": {
+                          "type": "string",
+                          "example": "MR"
+                        },
+                        "value": {
+                          "type": "string",
+                          "example": "12345"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parameter": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "array"
+        },
+        "items": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "example": "object"
+            },
+            "required": {
+              "type": "array",
+              "example": [
+                "name",
+                "resource"
+              ],
+              "items": {
+                "type": "string"
+              }
+            },
+            "properties": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "string"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "The name of the context parameter"
+                    }
+                  }
+                },
+                "resource": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "array"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "The resource of the context parameter"
+                    },
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "object"
+                        },
+                        "properties": {
+                          "type": "object",
+                          "properties": {
+                            "resourceType": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "The name of the context parameter part"
+                                }
+                              }
+                            },
+                            "use": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "The use of the context parameter part"
+                                }
+                              }
+                            },
+                            "system": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "The identifier system of the patient identifier"
+                                }
+                              }
+                            },
+                            "type": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "The type of the patient identifier"
+                                }
+                              }
+                            },
+                            "value": {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "example": "string"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "example": "The value of the patient identifier"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "example": {
+                          "type": "object",
+                          "properties": {
+                            "resourceType": {
+                              "type": "string",
+                              "example": "Patient"
+                            },
+                            "use": {
+                              "type": "string",
+                              "example": "official"
+                            },
+                            "system": {
+                              "type": "string",
+                              "example": "urn:oid:2.16.840.1.113883.4.50"
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": "MR"
+                            },
+                            "value": {
+                              "type": "string",
+                              "example": "12345"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "example": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "patient"
+                },
+                "resource": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "resourceType": {
+                        "type": "string",
+                        "example": "Patient"
+                      },
+                      "use": {
+                        "type": "string",
+                        "example": "usual"
+                      },
+                      "system": {
+                        "type": "string",
+                        "example": "urn:oid:2.16.840.1.113883.4.50"
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "JHN"
+                      },
+                      "value": {
+                        "type": "string",
+                        "example": "9094888634"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

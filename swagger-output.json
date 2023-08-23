@@ -6,7 +6,7 @@
     "description": "This is a REST API for managing SMART on FHIR Contexts"
   },
   "host": "localhost:3000",
-  "basePath": "/api/",
+  "basePath": "/",
   "schemes": [
     "http",
     "https"
@@ -87,6 +87,18 @@
             "type": "string"
           }
         ],
+        "requestBody": {
+          "description": "The context to create",
+          "required": true,
+          "content": {
+              "application/json": {
+                  "schema": {
+                      "$ref": "#/definitions/Context",
+                      "type": "object"
+                  }
+              }
+          }
+      },
         "responses": {
           "201": {
             "description": "Created"
@@ -149,7 +161,7 @@
       "properties": {
         "type": {
           "type": "string",
-          "example": "object"
+          "example": "Parameters"
         },
         "required": {
           "type": "array",

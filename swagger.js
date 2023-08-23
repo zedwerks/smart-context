@@ -10,12 +10,12 @@ const doc = {
         description: "This is a REST API for managing SMART on FHIR Contexts",
     },
     host: "localhost:3000",
-    basePath: "/api/",
+    basePath: "/",
     schemes: ['http', 'https'],
     consumes: ['application/json'],
     produces: ['application/json'],
     paths: {
-        "/context/{id}": {
+        "/api/context/{id}": {
             get: {
                 "tags": [
                     "Context"
@@ -70,28 +70,30 @@ const doc = {
                 }
             }
         },
-        "/context": {
-            post: {
-                summary: "Create a context",
-                "description": "Create a context",
-                "operationId": "createContext",
-                "parameters": [
-                    {
-                        name: "Context",
-                        in: "body",
-                        description: "The context to create",
-                        "required": true,
-                        schema: {
-                            $ref: "#/definitions/Context"
+        "/api/context": {
+            "post": {
+                "summary": "Create a context",
+                "description": "Submit a Context",
+                "requestBody": {
+                    "description": "The context to create",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Context"
+                            }
                         }
                     }
-                ],
-                "responses": {
+                },
+                responses: {
                     "201": {
                         "description": "Context created",
                         "schema": {
                             "$ref": "#/definitions/ContextId"
                         }
+                    },
+                    "400": {
+                        description: 'Bad Request'
                     }
                 }
             }

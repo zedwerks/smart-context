@@ -13,6 +13,10 @@ function getPublicKey(header, callback) {
 
     const client = jwksClient({
         jwksUri: jwksUri,
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        strictSsl: false,
     });
 
     client.getSigningKey(header.kid, (err, key) => {

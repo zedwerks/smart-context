@@ -6,7 +6,7 @@ const jwksClient = require('jwks-rsa');
 const issuer = process.env.ISSUER;
 const jwksUri = process.env.JWKS_URI;
 const clientId = process.env.CLIENT_ID || null;
-const neededScopes = process.env.SCOPES || "context:read";
+const neededScopes = process.env.SCOPES || "context";
 
 // Function to get the public key
 function getPublicKey(header, callback) {
@@ -20,11 +20,17 @@ function getPublicKey(header, callback) {
             console.warn('Error in getSigningKey:', err);
             callback(err, null);
         }
-        const publicKey = key.publicKey || key.rsaPublicKey;
+        var publicKey;
 
-        if (header.alg && key.alg !== header.alg) {
-            callback(new Error('mismatch key algorithm'), null);
+        if (key.rsaPublicKey !== undefined && key.rsaPublicKey !== null) {
+            console.debug('key.rsaPublicKey: ', key.rsaPublicKey);
+            publicKey = key.rsaPublicKey;
         }
+        else if (key.publicKey !== undefined && key.publicKey !== null) {
+            console.debug('key.publicKey: ', key.publicKey);
+            publicKey = key.publicKey;
+        }
+
         console.debug('publicKey: ', publicKey);
         callback(null, publicKey);
     });
@@ -52,28 +58,33 @@ exports.tokenAuth = async (req, res, next) => {
     else if (authHeader) {
         const token = authHeader.split(' ')[1];
 
-        jwt.verify(token, getPublicKey, (err, decodedToken) => {
-            if (err) {
-                console.log('Error during jwt.verify()', err);
-                return res.sendStatus(401);
-            }
-            if (decodedToken && decodedToken.iss !== issuer) {
-                console.log('Error: invalid issuer');
-                return res.sendStatus(401);
-            }
-            if (decodedToken && decodedToken.clientId !== clientId) {
-                console.log('Error: invalid client');
-                return res.sendStatus(401);
-            }
-            if (decodedToken && decodedToken.scopes) {
-                const scopes = decodedToken.scopes.split(' ');
-                if (!neededScopes.split(' ').some(scope => scopes.includes(scope))) {
+        jwt.verify(token, getPublicKey, {
+            issuer: issuer,
+            algorithms: ['RS256'],
+            clientId: clientId
+        },
+            function (err, decodedToken) {
+                if (err) {
+                    console.log('Error during jwt.verify()', err);
                     return res.sendStatus(401);
                 }
-            }
-            console.debug('JWT decoded and validated: ', decodedToken);
-            next();
-        });
+                if (decodedToken && decodedToken.iss !== issuer) {
+                    console.log('Error: invalid issuer');
+                    return res.sendStatus(401);
+                }
+                if (decodedToken && decodedToken.clientId !== clientId) {
+                    console.log('Error: invalid client');
+                    return res.sendStatus(401);
+                }
+                if (decodedToken && decodedToken.scopes) {
+                    const scopes = decodedToken.scopes.split(' ');
+                    if (!neededScopes.split(' ').some(scope => scopes.includes(scope))) {
+                        return res.sendStatus(401);
+                    }
+                }
+                console.debug('JWT decoded and validated: ', decodedToken);
+                next();
+            });
     } else {
         return res.sendStatus(401);
     }

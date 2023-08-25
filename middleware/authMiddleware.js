@@ -15,18 +15,21 @@ function getPublicKey(header, callback) {
         jwksUri: jwksUri,
         cache: true,
         rateLimit: true,
-        jwksRequestsPerMinute: 5,
-        strictSsl: false,
+        jwksRequestsPerMinute: 10,
     });
 
     client.getSigningKey(header.kid, (err, key) => {
         if (err) {
-            console.warn('Error in getSigningKey:', err);
+            console.error('Error in getSigningKey:', err);
             callback(err, null);
         }
         var publicKey;
 
-        if (key.rsaPublicKey !== undefined && key.rsaPublicKey !== null) {
+        if (key === undefined || key === null) {
+            console.error('key is undefined or null');
+            return;
+        }
+        else if (key.rsaPublicKey !== undefined && key.rsaPublicKey !== null) {
             console.debug('key.rsaPublicKey: ', key.rsaPublicKey);
             publicKey = key.rsaPublicKey;
         }
@@ -37,6 +40,7 @@ function getPublicKey(header, callback) {
 
         console.debug('publicKey: ', publicKey);
         callback(null, publicKey);
+        return;
     });
 }
 
@@ -62,36 +66,48 @@ exports.tokenAuth = async (req, res, next) => {
     else if (authHeader) {
         const token = authHeader.split(' ')[1];
 
-        jwt.verify(token, getPublicKey, {
-            issuer: issuer,
-            algorithms: ['RS256'],
-            clientId: clientId
-        },
-            function (err, decodedToken) {
-                if (err) {
-                    console.log('Error during jwt.verify()', err);
-                    return res.sendStatus(401);
-                }
-                if (decodedToken && decodedToken.iss !== issuer) {
-                    console.log('Error: invalid issuer');
-                    return res.sendStatus(401);
-                }
-                if (decodedToken && decodedToken.clientId !== clientId) {
-                    console.log('Error: invalid client');
-                    return res.sendStatus(401);
-                }
-                if (decodedToken && decodedToken.scopes) {
-                    const scopes = decodedToken.scopes.split(' ');
-                    if (!neededScopes.split(' ').some(scope => scopes.includes(scope))) {
+        if (token === "" || token === undefined || token === null) {
+            console.debug('Authorization token is missing');
+            return res.sendStatus(401);
+        }
+
+        try {
+
+            jwt.verify(token, getPublicKey, {
+                issuer: issuer,
+                algorithms: ['RS256'],
+                clientId: clientId
+            },
+                function (err, decodedToken) {
+                    if (err) {
+                        console.log('Error during jwt.verify()', err);
                         return res.sendStatus(401);
                     }
-                }
-                console.debug('JWT decoded and validated: ', decodedToken);
-                next();
-            });
+                    if (decodedToken && decodedToken.iss !== issuer) {
+                        console.log('Error: invalid issuer');
+                        return res.sendStatus(401);
+                    }
+                    if (decodedToken && decodedToken.clientId !== clientId) {
+                        console.log('Error: invalid client');
+                        return res.sendStatus(401);
+                    }
+                    if (decodedToken && decodedToken.scopes) {
+                        const scopes = decodedToken.scopes.split(' ');
+                        if (!neededScopes.split(' ').some(scope => scopes.includes(scope))) {
+                            return res.sendStatus(401);
+                        }
+                    }
+                    console.debug('JWT decoded and validated: ', decodedToken);
+                    next();
+                });
+        } catch (err) {
+            console.log('Error during jwt.verify()', err);
+            return res.sendStatus(401);
+        }
     } else {
         return res.sendStatus(401);
     }
+
 }
 
 exports.apiKeyAuth = async (req, res, next) => {

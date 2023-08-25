@@ -14,4 +14,4 @@ RUN npm install
 
 # Run the app
 EXPOSE 8088
-CMD ["node", "server.js"]
+CMD ["npm", "start"]

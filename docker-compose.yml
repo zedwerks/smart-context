@@ -1,6 +1,7 @@
 version: '3.1'
 services:
   smart-context:
+    container_name: smart-context
     image: smart-context
     build:
       context: .
@@ -11,7 +12,12 @@ services:
       - .:/app
     environment:
     - ISSUER=http://localhost:8080/auth/realms/poc
-    - JWKS_URI=http://localhost:8080/auth/realms/poc/protocol/openid-connect/certs
+    - JWKS_URI=http://127.0.0.1:8080/auth/realms/poc/protocol/openid-connect/certs/
     - CLIENT_ID=smile-cdr
     - SCOPES="launch context"
     - API_KEY=e7ce47e88053fa31998de414423e82c47fd479688be5ad8dd9ecc0ac61108a8b
+    networks: 
+      - demo-network
+networks:
+  demo-network:
+    external: true

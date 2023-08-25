@@ -25,7 +25,7 @@ exports.getContext = asyncHandler(async (req, res, next) => {
 
     var data = ContextModel.getContext(contextId);
     res.contentType("application/json");
-    if (data == null) {
+    if (data === null) {
         return res.status(404).send();
     } else {
         return res.status(200).send(data);

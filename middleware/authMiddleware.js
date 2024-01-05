@@ -6,7 +6,7 @@ const jwksClient = require('jwks-rsa');
 const issuer = process.env.ISSUER;
 const jwksUri = process.env.JWKS_URI;
 const clientId = process.env.CLIENT_ID || null;
-const neededScopes = process.env.SCOPES || "context";
+const neededScopes = process.env.SCOPES || "context.read";
 
 // Function to get the public key
 function getPublicKey(header, callback) {
@@ -87,8 +87,9 @@ exports.tokenAuth = async (req, res, next) => {
                         console.log('Error: invalid issuer');
                         return res.sendStatus(401);
                     }
-                    if (decodedToken && decodedToken.clientId !== clientId) {
-                        console.log('Error: invalid client');
+                    if (decodedToken && decodedToken.azp !== clientId) {
+                        console.log('Error: invalid client in token');
+                        console.warn('Expected clientId: ' + clientId);
                         return res.sendStatus(401);
                     }
                     if (decodedToken && decodedToken.scopes) {
@@ -97,7 +98,7 @@ exports.tokenAuth = async (req, res, next) => {
                             return res.sendStatus(401);
                         }
                     }
-                    console.debug('JWT decoded and validated: ', decodedToken);
+                    console.log('JWT decoded and validated: ', decodedToken);
                     next();
                 });
         } catch (err) {

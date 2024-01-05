@@ -11,10 +11,10 @@ services:
     volumes:
       - .:/app
     environment:
-    - ISSUER=http://localhost:8080/auth/realms/poc
+    - ISSUER=http://keycloak:8080/auth/realms/poc
     - JWKS_URI=http://keycloak:8080/auth/realms/poc/protocol/openid-connect/certs/
     - CLIENT_ID=smile-cdr
-    - SCOPES="launch context"
+    - SCOPES="context"
     - API_KEY=e7ce47e88053fa31998de414423e82c47fd479688be5ad8dd9ecc0ac61108a8b
     networks: 
       - demo-network

@@ -92,11 +92,15 @@ exports.tokenAuth = async (req, res, next) => {
                         console.warn('Expected clientId: ' + clientId);
                         return res.sendStatus(401);
                     }
-                    if (decodedToken && decodedToken.scopes) {
-                        const scopes = decodedToken.scopes.split(' ');
+                    if (decodedToken && decodedToken.scope) {
+                        const scopes = decodedToken.scope.split(' ');
                         if (!neededScopes.split(' ').some(scope => scopes.includes(scope))) {
                             return res.sendStatus(401);
                         }
+                    }
+                    else {
+                        console.log('Error: no scope in token');
+                        return res.sendStatus(401);
                     }
                     console.log('JWT decoded and validated: ', decodedToken);
                     next();
